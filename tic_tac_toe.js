@@ -7,8 +7,8 @@ let btn_6 = document.getElementById("6")
 let btn_7 = document.getElementById("7")
 let btn_8 = document.getElementById("8")
 let btn_9 = document.getElementById("9")
-let turn = "X"
 let winner = null;
+let turn = "O"
 
 function change_turn() {
     if (turn == "X") {
@@ -18,49 +18,58 @@ function change_turn() {
         turn = "X"
     }
 }
-
+function isDraw() {
+    const allBtns = [btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9];
+    if (allBtns.every(btn => btn.innerText !== "") && !winner) {
+        setTimeout(() => alert("Draw!"), 400);
+    }
+}
+function highlight(btns) {
+    btns.forEach(btn => btn.classList.add("winner"));
+}
 function chk_win() {
-    if (btn_1.innerText==btn_2.innerText&&btn_1.innerText==btn_3.innerText&&btn_1.innerText!="") {
-        winner = turn;
-        alert(turn + ' Win')
+    const combos = [
+        [btn_1, btn_2, btn_3],
+        [btn_4, btn_5, btn_6],
+        [btn_7, btn_8, btn_9],
+        [btn_1, btn_4, btn_7],
+        [btn_2, btn_5, btn_8],
+        [btn_3, btn_6, btn_9],
+        [btn_1, btn_5, btn_9],
+        [btn_3, btn_5, btn_7],
+    ];
+
+    for (let combo of combos) {
+        if (combo[0].innerText === combo[1].innerText &&
+            combo[1].innerText === combo[2].innerText &&
+            combo[0].innerText !== "") {
+            winner = turn;
+            highlight(combo);
+            setTimeout(() => alert(turn + " Wins!"), 400);
+            // setTimeout(() => reset(), 2000);
+            return;
+        }
     }
-    if (btn_4.innerText==btn_5.innerText&&btn_4.innerText==btn_6.innerText&&btn_4.innerText!="") {
-        winner = turn;
-        alert(turn + ' Win')
-    }
-    if (btn_7.innerText==btn_8.innerText&&btn_7.innerText==btn_9.innerText&&btn_7.innerText!="") {
-        winner = turn;
-        alert(turn + ' Win')
-    }
-    if (btn_1.innerText==btn_4.innerText&&btn_1.innerText==btn_7.innerText&&btn_1.innerText!="") {
-        winner = turn;
-        alert(turn + ' Win')
-    }
-    if (btn_2.innerText==btn_5.innerText&&btn_2.innerText==btn_8.innerText&&btn_2.innerText!="") {
-        winner = turn;
-        alert(turn + ' Win')
-    }
-    if (btn_3.innerText==btn_6.innerText&&btn_3.innerText==btn_9.innerText&&btn_3.innerText!="") {
-        winner = turn;
-        alert(turn + ' Win')
-    }
-    if (btn_1.innerText==btn_5.innerText&&btn_1.innerText==btn_9.innerText&&btn_1.innerText!="") {
-        winner = turn;
-        alert(turn + ' Win')
-    }
-    if (btn_3.innerText==btn_5.innerText&&btn_3.innerText==btn_7.innerText&&btn_3.innerText!="") {
-        winner = turn;
-        alert(turn + ' Win')
-    }
+}
+
+function reset() {
+    const all = [btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9]
+    all.forEach(btn => {
+        btn.innerText = ""
+        btn.classList.remove("winner");
+    });
+    turn = "O"
+    winner = null;
 }
 
 function turn_(btn) {
-    if(btn.innerText = turn) chk_win()
-    // console.log(turn);
-    // if (!winner) chk_win()
     change_turn();
+    if (btn.innerText === "" && !winner) {
+        btn.innerText = turn;
+        chk_win();
+        isDraw();
+    }
 }
-
 function turn_1() {
     turn_(btn_1);
 }
