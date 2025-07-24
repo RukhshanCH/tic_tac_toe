@@ -9,13 +9,17 @@ let btn_8 = document.getElementById("8")
 let btn_9 = document.getElementById("9")
 let winner = null;
 let turn = "O"
+let player = document.getElementById("player")
 
 function change_turn() {
     if (turn == "X") {
         turn = "O"
+        player.innerText = "Player O"
+
     }
     else {
         turn = "X"
+        player.innerText = "Player X"
     }
 }
 function isDraw() {
